@@ -33,17 +33,22 @@ Deno.serve(async (req: Request) => {
       }
 
       // 2. User sends a text message
+     // 2. User sends a text message
       if (event.type === "message" && event.message.type === "text") {
         const text = event.message.text.trim();
+        
+        // NEW: Check if they typed "綁定...", "bind...", OR just a raw 10-digit TW phone number (09xxxxxxxx)
+        const isBindingAttempt = text.startsWith("綁定") || 
+                                 text.toLowerCase().startsWith("bind") || 
+                                 /^09\d{8}$/.test(text);
 
-        // Check if they are trying to bind their account
-        if (text.startsWith("綁定") || text.toLowerCase().startsWith("bind")) {
+        if (isBindingAttempt) {
           
-          // Extract only the numbers from their message (e.g., "綁定 0912345678" -> "0912345678")
+          // Extract only the numbers from their message
           const phone = text.replace(/[^\d]/g, "");
 
-          if (!phone) {
-            await replyToLine(replyToken, "⚠️ 格式錯誤。請提供正確的手機號碼，例如：綁定 0912345678", lineToken!);
+          if (!phone || phone.length !== 10) {
+            await replyToLine(replyToken, "⚠️ 格式錯誤。請提供正確的10碼手機號碼，例如：0912345678", lineToken!);
             continue;
           }
 
@@ -62,7 +67,7 @@ Deno.serve(async (req: Request) => {
           }
         } else {
           // General reply if they type random things
-          await replyToLine(replyToken, "💡 系統提示：\n請輸入「綁定 您的手機號碼」來完成系統連線。\n\n👉 範例：綁定 0912345678", lineToken!);
+          await replyToLine(replyToken, "💡 系統提示：\n請直接輸入您的「10碼手機號碼」來完成系統連線。\n\n👉 範例：0912345678", lineToken!);
         }
       }
     }
