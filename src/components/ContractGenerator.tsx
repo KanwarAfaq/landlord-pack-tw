@@ -25,6 +25,8 @@ export function ContractGenerator() {
     propertyImages: [],
     landlordSignature: null,
     signaturePosition: 'bottom-right',
+    tenantSignature: null,
+    tenantSignaturePosition: 'bottom-left', // Default tenant seal to the left
   });
 
   const printRef = useRef<HTMLDivElement>(null);
@@ -57,17 +59,21 @@ export function ContractGenerator() {
     });
   };
 
-  const handleSignatureUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSignatureUpload = (e: React.ChangeEvent<HTMLInputElement>, role: 'landlord' | 'tenant') => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
         if (event.target?.result) {
-          setFormData(prev => ({ ...prev, landlordSignature: event.target!.result as string }));
+          if (role === 'landlord') {
+            setFormData(prev => ({ ...prev, landlordSignature: event.target!.result as string }));
+          } else {
+            setFormData(prev => ({ ...prev, tenantSignature: event.target!.result as string }));
+          }
         }
       };
       reader.readAsDataURL(file);
-    };
+    }
   };
 
   return (
@@ -158,12 +164,30 @@ export function ContractGenerator() {
 
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-6">
             <div>
-              <h3 className="text-sm font-bold flex items-center space-x-2 mb-3"><PenTool className="w-4 h-4 text-indigo-600" /><span>房東數位騎縫章 (Digital Signature)</span></h3>
-              <input type="file" accept="image/png, image/jpeg" onChange={handleSignatureUpload} className="text-xs mb-2 block w-full text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
-              <select value={formData.signaturePosition} onChange={(e) => setFormData(p => ({...p, signaturePosition: e.target.value as any}))} className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs">
-                <option value="bottom-right">騎縫章位置：右下角</option>
-                <option value="bottom-left">騎縫章位置：左下角</option>
-                <option value="center">騎縫章位置：置中</option>
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="text-sm font-bold flex items-center space-x-2"><PenTool className="w-4 h-4 text-indigo-600" /><span>甲方(房東) 數位印章/簽名</span></h3>
+                {formData.landlordSignature && <button onClick={() => setFormData(p => ({...p, landlordSignature: null}))} className="text-[10px] text-rose-500 font-bold hover:underline">🗑️ 移除</button>}
+              </div>
+              <p className="text-[10px] text-slate-500 mb-2">若需實體用印請留白 (Leave blank for physical stamping)</p>
+              <input type="file" accept="image/png, image/jpeg" onChange={(e) => handleSignatureUpload(e, 'landlord')} className="text-xs mb-2 block w-full text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+              <select disabled={!formData.landlordSignature} value={formData.signaturePosition} onChange={(e) => setFormData(p => ({...p, signaturePosition: e.target.value as any}))} className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs disabled:bg-slate-100">
+                <option value="bottom-right">騎縫章位置：右下角 (Bottom Right)</option>
+                <option value="bottom-left">騎縫章位置：左下角 (Bottom Left)</option>
+                <option value="center">騎縫章位置：置中 (Center)</option>
+              </select>
+            </div>
+
+            <div className="pt-4 border-t border-slate-100">
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="text-sm font-bold flex items-center space-x-2"><PenTool className="w-4 h-4 text-indigo-600" /><span>乙方(租客) 數位印章/簽名</span></h3>
+                {formData.tenantSignature && <button onClick={() => setFormData(p => ({...p, tenantSignature: null}))} className="text-[10px] text-rose-500 font-bold hover:underline">🗑️ 移除</button>}
+              </div>
+              <p className="text-[10px] text-slate-500 mb-2">若需實體用印請留白 (Leave blank for physical stamping)</p>
+              <input type="file" accept="image/png, image/jpeg" onChange={(e) => handleSignatureUpload(e, 'tenant')} className="text-xs mb-2 block w-full text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100" />
+              <select disabled={!formData.tenantSignature} value={formData.tenantSignaturePosition} onChange={(e) => setFormData(p => ({...p, tenantSignaturePosition: e.target.value as any}))} className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs disabled:bg-slate-100">
+                <option value="bottom-left">騎縫章位置：左下角 (Bottom Left)</option>
+                <option value="bottom-right">騎縫章位置：右下角 (Bottom Right)</option>
+                <option value="center">騎縫章位置：置中 (Center)</option>
               </select>
             </div>
 

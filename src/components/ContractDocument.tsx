@@ -25,6 +25,8 @@ export interface ContractData {
   propertyImages: string[];
   landlordSignature: string | null;
   signaturePosition: 'bottom-right' | 'bottom-left' | 'center';
+  tenantSignature: string | null;
+  tenantSignaturePosition: 'bottom-right' | 'bottom-left' | 'center';
 }
 
 interface ContractDocumentProps {
@@ -32,9 +34,13 @@ interface ContractDocumentProps {
 }
 
 export const ContractDocument = forwardRef<HTMLDivElement, ContractDocumentProps>(({ data }, ref) => {
-  const sigPositionClass = 
+  const landlordSigPositionClass = 
     data.signaturePosition === 'bottom-left' ? 'left-8' :
     data.signaturePosition === 'center' ? 'left-1/2 -translate-x-1/2' : 'right-8';
+
+  const tenantSigPositionClass = 
+    data.tenantSignaturePosition === 'bottom-left' ? 'left-8' :
+    data.tenantSignaturePosition === 'center' ? 'left-1/2 -translate-x-1/2' : 'right-8';
 
   return (
     <div
@@ -42,12 +48,22 @@ export const ContractDocument = forwardRef<HTMLDivElement, ContractDocumentProps
       className="relative bg-white text-slate-900 font-serif leading-relaxed text-sm max-w-3xl mx-auto shadow-sm print:shadow-none print:max-w-full print:m-0"
       style={{ minHeight: '1050px', counterReset: 'page' }}
     >
-      {/* Repeating Signature Watermark (騎縫章) */}
+      {/* Landlord Repeating Signature Watermark (騎縫章) */}
       {data.landlordSignature && (
-        <div className={`hidden print:block fixed bottom-4 ${sigPositionClass} opacity-80 z-50`}>
-          <img src={data.landlordSignature} alt="Signature" className="h-16 object-contain mix-blend-multiply" />
+        <div className={`hidden print:flex flex-col items-center fixed bottom-4 ${landlordSigPositionClass} opacity-80 z-50`}>
+          <img src={data.landlordSignature} alt="Landlord Seal" className="h-16 object-contain mix-blend-multiply" />
           <p className="text-[8px] text-slate-400 text-center border-t border-slate-300 mt-1 pt-1">
-            騎縫章 / Cross-page Seal
+            甲方騎縫章 (Landlord)
+          </p>
+        </div>
+      )}
+
+      {/* Tenant Repeating Signature Watermark (騎縫章) */}
+      {data.tenantSignature && (
+        <div className={`hidden print:flex flex-col items-center fixed bottom-4 ${tenantSigPositionClass} opacity-80 z-50`}>
+          <img src={data.tenantSignature} alt="Tenant Seal" className="h-16 object-contain mix-blend-multiply" />
+          <p className="text-[8px] text-slate-400 text-center border-t border-slate-300 mt-1 pt-1">
+            乙方騎縫章 (Tenant)
           </p>
         </div>
       )}
@@ -133,10 +149,13 @@ export const ContractDocument = forwardRef<HTMLDivElement, ContractDocumentProps
                <img src={data.landlordSignature} alt="Sig" className="absolute top-6 left-4 h-16 mix-blend-multiply" />
             )}
           </div>
-          <div>
+          <div className="relative">
             <p className="font-bold text-lg mb-16">承租人 (乙方) 簽章：</p>
             <div className="border-b-2 border-slate-400"></div>
             <p className="text-xs text-slate-500 mt-2">日期 (Date): 年 / 月 / 日</p>
+            {data.tenantSignature && (
+               <img src={data.tenantSignature} alt="Sig" className="absolute top-6 left-4 h-16 mix-blend-multiply" />
+            )}
           </div>
         </div>
 

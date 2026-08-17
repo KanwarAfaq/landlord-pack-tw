@@ -3,7 +3,9 @@ import { AuthModal } from './components/AuthModal';
 import { DashboardShell } from './components/DashboardShell';
 import { ContractGenerator } from './components/ContractGenerator';
 import { TenantReminderManager } from './components/TenantReminderManager';
-import { Loader2, Plus, Home } from 'lucide-react';
+import { PropertiesDashboard } from './components/PropertiesDashboard';
+import { TenantsDashboard } from './components/TenantsDashboard';
+import { Loader2 } from 'lucide-react';
 
 export default function App() {
   const { session, profile, loading, signOut } = useAuth();
@@ -27,7 +29,14 @@ export default function App() {
     <DashboardShell profile={profile} onSignOut={signOut}>
       {(currentTab) => {
         switch (currentTab) {
+          case 'properties':
+            return <PropertiesDashboard />;
+            
+          case 'tenants':
+            return <TenantsDashboard />;
+
           case 'contract':
+          case 'contracts': // Handled both singular and plural just in case
             return <ContractGenerator />;
 
           case 'receipts':
@@ -40,33 +49,16 @@ export default function App() {
                 <TenantReminderManager />
               </div>
             );
-
-          case 'properties':
-          default:
+            
+          case 'settings':
             return (
-              <div className="max-w-6xl mx-auto space-y-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-900">房產物件管理</h3>
-                    <p className="text-xs text-slate-500">管理您的出租套房、公寓與電費設定</p>
-                  </div>
-                  <button className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-indigo-700 transition">
-                    <Plus className="w-4 h-4" />
-                    <span>新增物件 (Add Property)</span>
-                  </button>
-                </div>
-
-                <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center">
-                  <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                    <Home className="w-6 h-6" />
-                  </div>
-                  <h4 className="text-sm font-semibold text-slate-800">尚未建立出租物件</h4>
-                  <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-                    點擊上方按鈕新增您的第一個出租套房或公寓，並開始自動化追蹤租金。
-                  </p>
-                </div>
+              <div className="flex items-center justify-center h-64 bg-white rounded-3xl border border-slate-200">
+                <p className="text-slate-500 font-medium">系統設定開發中 (Settings under development...)</p>
               </div>
             );
+
+          default:
+            return <PropertiesDashboard />;
         }
       }}
     </DashboardShell>
