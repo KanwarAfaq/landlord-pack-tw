@@ -5,6 +5,7 @@ import { ContractGenerator } from './components/ContractGenerator';
 import { TenantReminderManager } from './components/TenantReminderManager';
 import { PropertiesDashboard } from './components/PropertiesDashboard';
 import { TenantsDashboard } from './components/TenantsDashboard';
+import { SettingsDashboard } from './components/SettingsDashboard';
 import { Loader2 } from 'lucide-react';
 
 export default function App() {
@@ -36,7 +37,7 @@ export default function App() {
             return <TenantsDashboard />;
 
           case 'contract':
-          case 'contracts': // Handled both singular and plural just in case
+          case 'contracts':
             return <ContractGenerator />;
 
           case 'receipts':
@@ -51,11 +52,7 @@ export default function App() {
             );
             
           case 'settings':
-            return (
-              <div className="flex items-center justify-center h-64 bg-white rounded-3xl border border-slate-200">
-                <p className="text-slate-500 font-medium">系統設定開發中 (Settings under development...)</p>
-              </div>
-            );
+            return <SettingsDashboard />;
 
           default:
             return <PropertiesDashboard />;

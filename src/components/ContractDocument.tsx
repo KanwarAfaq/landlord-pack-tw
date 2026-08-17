@@ -8,6 +8,7 @@ export interface ContractData {
   tenantId: string;
   tenantPhone: string;
   lineUserId: string;
+  lineBotId?: string; // NEW: To pass the bot ID dynamically
   propertyAddress: string;
   startDate: string;
   endDate: string;
@@ -41,6 +42,10 @@ export const ContractDocument = forwardRef<HTMLDivElement, ContractDocumentProps
   const tenantSigPositionClass = 
     data.tenantSignaturePosition === 'bottom-left' ? 'left-8' :
     data.tenantSignaturePosition === 'center' ? 'left-1/2 -translate-x-1/2' : 'right-8';
+
+  // Dynamic QR Code Generation
+  const botId = data.lineBotId || '@smartlandlord';
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://line.me/R/ti/p/${botId}`)}`;
 
   return (
     <div
@@ -140,6 +145,7 @@ export const ContractDocument = forwardRef<HTMLDivElement, ContractDocumentProps
           </div>
         </div>
 
+        {/* Signatures */}
         <div className="mt-16 pt-8 border-t-2 border-slate-900 grid grid-cols-2 gap-12 break-inside-avoid">
           <div className="relative">
             <p className="font-bold text-lg mb-16">出租人 (甲方) 簽章：</p>
@@ -159,6 +165,30 @@ export const ContractDocument = forwardRef<HTMLDivElement, ContractDocumentProps
           </div>
         </div>
 
+        {/* --- NEW SECTION: LINE BOT QR CODE --- */}
+        <div className="mt-16 pt-10 border-t-2 border-slate-900 print:break-before-page break-inside-avoid text-center">
+          <h3 className="text-2xl font-black text-slate-900 mb-2">租客專屬 LINE 服務綁定</h3>
+          <p className="text-sm text-slate-600 mb-8 font-bold">Tenant LINE Notification Binding</p>
+          
+          <div className="bg-emerald-50 border-2 border-emerald-500 rounded-2xl p-8 max-w-lg mx-auto shadow-sm">
+            <h4 className="text-lg font-bold text-emerald-800 mb-4">請掃描下方 QR Code 啟用繳費通知</h4>
+            <div className="flex justify-center mb-6">
+              <div className="bg-white p-4 rounded-2xl shadow-md border border-emerald-200">
+                <img src={qrCodeUrl} alt="LINE Bot QR Code" className="w-40 h-40" />
+              </div>
+            </div>
+            <div className="text-left bg-white p-6 rounded-xl border border-emerald-200 text-slate-700 text-sm">
+              <p className="font-bold mb-2">綁定步驟 (Binding Steps):</p>
+              <ol className="list-decimal pl-5 space-y-1">
+                <li>掃描上方 QR Code 加入官方帳號。</li>
+                <li>在對話框中輸入您的手機號碼：<span className="font-bold text-indigo-700">{data.tenantPhone || '您填寫的號碼'}</span></li>
+                <li>系統將自動連結您的租約，啟用自動催繳與電子收據功能！</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        {/* Property Photo Appendix */}
         {data.propertyImages.length > 0 && (
           <div className="pt-10 mt-10 border-t-2 border-slate-900 print:break-before-page break-inside-avoid">
             <h3 className="text-xl font-bold text-slate-900 border-l-4 border-slate-900 pl-2 mb-2">附件：房屋現況與設備附圖</h3>

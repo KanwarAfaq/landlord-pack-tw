@@ -20,6 +20,7 @@ interface DashboardShellProps {
 
 export function DashboardShell({ profile, onSignOut, children }: DashboardShellProps) {
   const [activeTab, setActiveTab] = useState<'properties' | 'tenants' | 'contract' | 'receipts' | 'settings'>('properties');
+  const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
 
   const navItems = [
     { id: 'properties', label: '房產物件 (Properties)', icon: Building },
@@ -103,7 +104,7 @@ export function DashboardShell({ profile, onSignOut, children }: DashboardShellP
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Header */}
-        <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between">
+        <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between z-10">
           <h2 className="text-base font-bold text-slate-800">
             {navItems.find((n) => n.id === activeTab)?.label}
           </h2>
@@ -112,10 +113,58 @@ export function DashboardShell({ profile, onSignOut, children }: DashboardShellP
               <Bell className="w-5 h-5" />
               <span className="w-2 h-2 bg-rose-500 rounded-full absolute top-2 right-2 ring-2 ring-white" />
             </button>
-            <button className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm transition">
-              <PlusCircle className="w-4 h-4" />
-              <span>快速新增</span>
-            </button>
+            
+            {/* Quick Add Dropdown Menu */}
+            <div className="relative">
+              <button 
+                onClick={() => setIsQuickAddOpen(!isQuickAddOpen)}
+                className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm transition"
+              >
+                <PlusCircle className="w-4 h-4" />
+                <span>快速新增</span>
+              </button>
+
+              {/* The Dropdown Panel */}
+              {isQuickAddOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in slide-in-from-top-2">
+                  <button 
+                    onClick={() => { 
+                      setActiveTab('properties'); 
+                      setIsQuickAddOpen(false); 
+                    }}
+                    className="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center transition"
+                  >
+                    <Building className="w-4 h-4 mr-3 text-slate-400" /> 
+                    新增物件 (Property)
+                  </button>
+                  
+                  <button 
+                    onClick={() => { 
+                      setActiveTab('tenants'); 
+                      setIsQuickAddOpen(false); 
+                    }}
+                    className="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 flex items-center transition"
+                  >
+                    <Users className="w-4 h-4 mr-3 text-slate-400" /> 
+                    新增租客 (Tenant)
+                  </button>
+                  
+                  <div className="h-px bg-slate-100 my-1"></div>
+                  
+                  <button 
+                    onClick={() => { 
+                      setActiveTab('contract'); 
+                      setIsQuickAddOpen(false); 
+                    }}
+                    className="w-full text-left px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-amber-50 hover:text-amber-700 flex items-center transition"
+                  >
+                    <FileText className="w-4 h-4 mr-3 text-slate-400" /> 
+                    建立合約 (Contract)
+                  </button>
+                </div>
+              )}
+            </div>
+
           </div>
         </header>
 
