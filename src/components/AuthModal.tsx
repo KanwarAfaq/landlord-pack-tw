@@ -4,9 +4,11 @@ import { Building2, Lock, Mail, User, AlertCircle, Loader2 } from 'lucide-react'
 
 interface AuthModalProps {
   onSuccess?: () => void;
+  /** Render only the card (used inside the landing page). */
+  embedded?: boolean;
 }
 
-export function AuthModal({ onSuccess }: AuthModalProps) {
+export function AuthModal({ onSuccess, embedded = false }: AuthModalProps) {
   const [isSignUp, setIsSignUp] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -47,8 +49,8 @@ export function AuthModal({ onSuccess }: AuthModalProps) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-900/10">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 border border-slate-100">
+    <div id="auth" className={embedded ? 'w-full' : 'min-h-screen flex items-center justify-center p-4 bg-slate-900/10'}>
+      <div className="w-full max-w-md mx-auto bg-white rounded-3xl shadow-2xl p-8 border border-slate-100">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600 text-white mb-4 shadow-lg shadow-indigo-200">
             <Building2 className="w-8 h-8" />

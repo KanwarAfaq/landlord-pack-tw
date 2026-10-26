@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { Save, Building, FileText, CreditCard, User, MessageCircle } from 'lucide-react';
+import { Save, Building, FileText, User, MessageCircle } from 'lucide-react';
 
 export function SettingsDashboard() {
   const [loading, setLoading] = useState(false);

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" role="img" aria-label="房東工具示意圖">
+<rect width="640" height="400" rx="28" fill="#eef2ff"/>
+<rect x="60" y="48" width="250" height="304" rx="18" fill="#fff"/>
+<rect x="84" y="78" width="140" height="14" rx="7" fill="#4f46e5"/>
+<g fill="#cbd5e1"><rect x="84" y="108" width="200" height="9" rx="4"/><rect x="84" y="128" width="180" height="9" rx="4"/><rect x="84" y="148" width="200" height="9" rx="4"/><rect x="84" y="168" width="150" height="9" rx="4"/></g>
+<rect x="84" y="206" width="200" height="60" rx="12" fill="#e0e7ff"/><text x="102" y="244" font-family="Arial,sans-serif" font-weight="800" font-size="22" fill="#312e81">租約 PDF</text>
+<circle cx="250" cy="312" r="26" fill="#ef4444" opacity=".85"/><text x="250" y="320" text-anchor="middle" font-family="serif" font-weight="800" font-size="22" fill="#fff">印</text>
+<rect x="340" y="48" width="240" height="140" rx="18" fill="#4f46e5"/>
+<text x="362" y="92" font-family="Arial,sans-serif" font-weight="800" font-size="20" fill="#fff">NT$ 18,000</text>
+<text x="362" y="120" font-family="Arial,sans-serif" font-size="14" fill="#c7d2fe">本月租金 · 3 天後到期</text>
+<rect x="362" y="140" width="120" height="30" rx="15" fill="#06c755"/><text x="422" y="160" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="14" fill="#fff">LINE 提醒</text>
+<rect x="340" y="212" width="240" height="140" rx="18" fill="#fff"/>
+<circle cx="378" cy="252" r="16" fill="#c7d2fe"/><rect x="406" y="242" width="110" height="10" rx="5" fill="#94a3b8"/><rect x="406" y="260" width="70" height="8" rx="4" fill="#cbd5e1"/>
+<circle cx="378" cy="306" r="16" fill="#fde68a"/><rect x="406" y="296" width="120" height="10" rx="5" fill="#94a3b8"/><rect x="406" y="314" width="80" height="8" rx="4" fill="#cbd5e1"/>
+</svg>

@@ -1,5 +1,5 @@
 import { useAuth } from './hooks/useAuth';
-import { AuthModal } from './components/AuthModal';
+import { Landing } from './components/Landing';
 import { DashboardShell } from './components/DashboardShell';
 import { ContractGenerator } from './components/ContractGenerator';
 import { TenantReminderManager } from './components/TenantReminderManager';
@@ -23,7 +23,7 @@ export default function App() {
   }
 
   if (!session) {
-    return <AuthModal />;
+    return <Landing />;
   }
 
   return (

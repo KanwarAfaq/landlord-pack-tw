@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, X, Crown, Building, MessageCircle, FileText } from 'lucide-react';
+import { Check, X, Crown } from 'lucide-react';
 
 interface UpgradeModalProps {
   isOpen: boolean;

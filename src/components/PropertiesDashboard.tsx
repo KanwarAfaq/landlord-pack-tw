@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { Building2, MapPin, Plus, Trash2, Home, Wallet, Activity, Edit, Image as ImageIcon, X, ChevronRight, LayoutGrid } from 'lucide-react';
+import { MapPin, Plus, Trash2, Home, Edit, Image as ImageIcon, X, ChevronRight, LayoutGrid } from 'lucide-react';
 
 interface Property {
   id: string;
@@ -121,7 +121,7 @@ export function PropertiesDashboard() {
       }
       setIsModalOpen(false);
       fetchProperties();
-    } catch (error) { alert('儲存失敗'); }
+    } catch { alert('儲存失敗'); }
   };
 
   const handleDelete = async (id: string) => {

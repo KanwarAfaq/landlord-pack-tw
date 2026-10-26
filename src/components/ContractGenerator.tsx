@@ -112,10 +112,14 @@ export function ContractGenerator() {
 
   const allAppendixImages = [...propertyImages, ...manualImages];
 
+  const sealPosition: ContractData['signaturePosition'] =
+    stampPosition === 'center' ? 'center' : stampPosition === 'top' ? 'bottom-left' : 'bottom-right';
+
   // Map to ContractData for the Document Component
   const contractData: ContractData = {
     ...formData,
     lineUserId: formData.tenantLineId,
+    bankCode: formData.bankName,
     startDate: formData.leaseStart,
     endDate: formData.leaseEnd,
     monthlyRent: Number(formData.rentAmount || 0),
@@ -127,10 +131,10 @@ export function ContractGenerator() {
     customClauses: [formData.customClauses],
     inventory: '',
     propertyImages: allAppendixImages,
-    landlordSignature: landlordStamp,
-    tenantSignature: tenantStamp,
-    signaturePosition: stampPosition as any,
-    tenantSignaturePosition: stampPosition as any,
+    landlordSignature: stampPosition === 'none' ? null : landlordStamp || null,
+    tenantSignature: stampPosition === 'none' ? null : tenantStamp || null,
+    signaturePosition: sealPosition,
+    tenantSignaturePosition: sealPosition,
   };
 
   return (
