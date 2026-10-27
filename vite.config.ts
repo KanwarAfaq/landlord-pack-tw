@@ -8,6 +8,6 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    seoPlugin({ fallbackUrl: 'https://landlord-pack.vercel.app' }),
+    seoPlugin({ fallbackUrl: 'https://landlord-pack-tw.vercel.app' }),
   ],
 })
