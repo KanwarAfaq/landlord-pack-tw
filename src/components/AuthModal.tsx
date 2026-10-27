@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase, supabaseConfigured } from '../lib/supabase';
 import { Building2, Lock, Mail, User, AlertCircle, Loader2 } from 'lucide-react';
 
 interface AuthModalProps {
@@ -15,15 +15,23 @@ export function AuthModal({ onSuccess, embedded = false }: AuthModalProps) {
   const [fullName, setFullName] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setErrorMessage(null);
+    setNotice(null);
+
+    if (!supabaseConfigured) {
+      setErrorMessage('系統尚未完成設定（缺少 Supabase 連線資訊），暫時無法登入，請聯絡網站管理員。');
+      setLoading(false);
+      return;
+    }
 
     try {
       if (isSignUp) {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -33,6 +41,11 @@ export function AuthModal({ onSuccess, embedded = false }: AuthModalProps) {
           },
         });
         if (error) throw error;
+        if (!data.session) {
+          setNotice('註冊成功！請到信箱點擊驗證連結後，再回來登入。');
+          setIsSignUp(false);
+          return;
+        }
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
@@ -42,7 +55,14 @@ export function AuthModal({ onSuccess, embedded = false }: AuthModalProps) {
       }
       onSuccess?.();
     } catch (err: any) {
-      setErrorMessage(err.message || 'Authentication failed');
+      const m = String(err?.message || '');
+      setErrorMessage(
+        /invalid login credentials/i.test(m) ? '電子郵件或密碼錯誤。'
+        : /email not confirmed/i.test(m) ? '請先到信箱點擊驗證連結後再登入。'
+        : /already registered/i.test(m) ? '此電子郵件已註冊，請直接登入。'
+        : /failed to fetch|networkerror|load failed/i.test(m) ? '無法連線到伺服器，請檢查網路或稍後再試。'
+        : m || '驗證失敗，請稍後再試。'
+      );
     } finally {
       setLoading(false);
     }
@@ -63,6 +83,9 @@ export function AuthModal({ onSuccess, embedded = false }: AuthModalProps) {
           </p>
         </div>
 
+        {notice && (
+          <div role="status" className="mb-4 p-3 rounded-xl bg-emerald-50 text-emerald-700 text-sm border border-emerald-100">{notice}</div>
+        )}
         {errorMessage && (
           <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-center space-x-3 text-rose-700 text-sm">
             <AlertCircle className="w-5 h-5 flex-shrink-0" />

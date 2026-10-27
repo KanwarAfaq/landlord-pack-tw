@@ -19,6 +19,10 @@ export function useAuth() {
       } else {
         setLoading(false);
       }
+    }).catch((err) => {
+      // Never leave the app stuck on the loading screen if the auth backend is unreachable.
+      console.error('getSession failed:', err);
+      setLoading(false);
     });
 
     // 2. Listen to real-time auth changes
